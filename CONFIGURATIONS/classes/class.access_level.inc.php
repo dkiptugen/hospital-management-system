@@ -1,7 +1,7 @@
 <?php
    class access_level
      {
-	   function grant_access($next_user)
+	   public static function grant_access($next_user)
 	      {
             switch ($next_user)
               {
@@ -32,7 +32,7 @@
               }
             return $x;
 	      }
-	   function get_loc($key)
+	   public static function get_loc($key)
 	      {
 	      	switch ($key) 
 	      	  {

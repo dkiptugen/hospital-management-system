@@ -42,7 +42,7 @@ function __autoload($class_name)
   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     <ul class="nav navbar-nav">
      <li><a href="index.php?id=book&&auth=<?php echo $_SESSION["un_id"]; ?>">PATIENT BOOKING</span></a></li>
-     <li><a href="index.php?id=view_patients&&auth=<?php echo $_SESSION["un_id"]; ?>">VIEW PATIENTS</a></li>
+     <!--li><a href="index.php?id=view_patients&&auth=<?php echo $_SESSION["un_id"]; ?>">VIEW PATIENTS</a></li-->
      <!--li class="dropdown">
        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
          <ul class="dropdown-menu">
@@ -122,7 +122,7 @@ function __autoload($class_name)
        <?php
         if(isset($_REQUEST["id"])||isset($_REQUEST["act"]))
            {
-             echo '<div class="panel panel-default " style="background:rgba(255,255,255,0.6); max-height:385px; overflow:auto; margin:0;">
+             echo '<div class="panel panel-default " style="background:rgba(255,255,255,0.6); max-height:430px; overflow:none; margin:0;">
                    <!--div class="panel-heading"><h3 class="panel-title">CONTENT</h3></div-->
                    <div class="panel-body">';
              if((isset($_REQUEST["id"])==true)&&($_REQUEST["auth"]==$_SESSION["un_id"]))
@@ -132,13 +132,13 @@ function __autoload($class_name)
                      {
                          booking($con);
                      }
-                  elseif($_REQUEST["id"]=="view_patients")
+                  elseif($_REQUEST["id"]=="view")
                      {
                          view($con);
                      }
-                  elseif($_REQUEST["id"]=="doc_spec")
+                  elseif($_REQUEST["id"]=="update")
                      {
-                        view_doc_spec($con,$_REQUEST["doc_id"]);
+                        update_patient($con);
                      }
 
                 }
@@ -157,7 +157,7 @@ function __autoload($class_name)
 
              echo ' </div><!--div class="panel-footer">Panel footer</div--></div>';
            }
-            DB::db_close($con);
+            
           ?>
     </div>
     <!-- END OF MAIN CONTENT -->
@@ -173,14 +173,27 @@ function __autoload($class_name)
      <div class="panel panel-info ">
            <div class="panel-heading"><h4 class="panel-title"> DOCTORS</h4></div>
            <div class="panel-body" style="height:200px; max-height:200px; overflow:auto;">
-              Basic panel example
-
+              <?php
+              $dbh=$con->query("select * from doctors where doc_status='active'");
+              $dbh->execute();
+              if($dbh->rowCount()>0)
+                 {
+                   echo "<ul>";
+                   while($row=$dbh->fetch(PDO::FETCH_ASSOC))
+                        {
+                          echo "<li>".$row["name"]."</li>";
+                        }
+                   echo "</ul>";
+                 }
+               ?>
            </div>
            <div class="panel-footer"><sup>AVAILABLE DOCTORS</sup></div>
        </div>   
     </div>
     <!-- END OF LEFT CONTENT -->
-
+<?php
+DB::db_close($con);
+?>
    
   </div>
  </div>
